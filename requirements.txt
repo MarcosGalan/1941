@@ -1,0 +1,2 @@
+pygame==2.4.0
+pyparsing==3.0.9
