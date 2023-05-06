@@ -8,7 +8,7 @@ from Utils.constants import screen_width, screen_height
 
 class Enemy(pygame.sprite.Sprite):
 
-    def __init__(self, pos: tuple, health=2, shoot_interval = 1500):
+    def __init__(self, pos: tuple,health=2, shoot_interval = 1500,bullet_speed = 5):
         super().__init__()
 
         self.sprites = []
@@ -30,6 +30,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.center = (pos[0]-80, -10)
 
         self.shoot_interval = shoot_interval
+        self.bullet_speed = bullet_speed
         self.last_shoot = 0
         self.bullets = pygame.sprite.Group()
 
@@ -65,5 +66,5 @@ class Enemy(pygame.sprite.Sprite):
     def shoot_control(self):
         if pygame.time.get_ticks() - self.last_shoot > self.shoot_interval:
             self.last_shoot = pygame.time.get_ticks()
-            self.bullets.add(Bullet(self.rect.center,10,1,screen_height,True))
+            self.bullets.add(Bullet(self.rect.center,self.bullet_speed,1,screen_height,True))
 

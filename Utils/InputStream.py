@@ -6,9 +6,11 @@ class Keyboard:
         self.currentKeyStates = None
         self.previousKeyStates = None
 
+
     def processInput(self):
         self.previousKeyStates = self.currentKeyStates
         self.currentKeyStates = pygame.key.get_pressed()
+
 
     def isKeyDown(self, keyCode):
         if self.currentKeyStates is None or self.previousKeyStates is None:
@@ -58,6 +60,7 @@ class InputStream:
     def __init__(self):
         self.keyboard = Keyboard()
         self.mouse = Mouse()
+        self.events = []
 
     def processInput(self):
         self.keyboard.processInput()

@@ -33,6 +33,7 @@ class PauseScreen(Scene):
         if inputStream.keyboard.isKeyPressed(pygame.K_ESCAPE) or self.play_button.is_clicked():
             sm.pop()
         if self.home_button.is_clicked():
+            sm.scenes[0].__init__()
             sm.set([sm.scenes[0]])
 
     def update(self, sm: SceneManager, inputStream: InputStream):

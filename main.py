@@ -26,8 +26,9 @@ running = True
 if __name__ == '__main__':
 
     while running:
-
-        for event in pygame.event.get():
+        events = pygame.event.get()
+        inputStream.events = events
+        for event in events:
             if event.type == pygame.QUIT:
                 running = False
 

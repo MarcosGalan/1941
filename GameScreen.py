@@ -6,6 +6,7 @@ import pygame
 
 from Enemy import Enemy
 from Explosion import Explosion
+from LoseScreen import LoseScreen
 from PauseScreen import PauseScreen
 from Player import Player
 from Utils.Button import ClickButton
@@ -15,10 +16,10 @@ from Utils.constants import screen_width, screen_height
 
 class GameScreen(Scene):
 
-    def __init__(self):
+    def __init__(self, name):
         super().__init__()
 
-        self.background = pygame.image.load(f"assets/sprites/background_{random.randint(0, 4)}.png")
+        self.background = pygame.image.load(f"assets/sprites/background_{random.randint(0, 3)}.png")
         self.background = pygame.transform.scale(self.background, (screen_width, screen_height))
 
         self.points = 0
@@ -30,9 +31,8 @@ class GameScreen(Scene):
         self.font_mid = pygame.font.Font(os.path.abspath("assets/fonts/forwa.ttf"), 12)
 
 
-
-
         # Player
+        self.name = name
         self.max_health = 10
         player_sprite = Player(pos=(screen_width / 2, screen_height * 0.95), speed=5, health=self.max_health, damage=5,
                                constraint_x=screen_width)
@@ -41,8 +41,9 @@ class GameScreen(Scene):
         # Enemies
         self.last_enemy = 0
         self.enemies = pygame.sprite.Group()
-        self.frequency = 1500
+        self.frequency = 2500
         self.quantity = 8
+        self.bullet_speed = 5
 
         # Explosions
         self.explosions = pygame.sprite.Group()
@@ -74,27 +75,31 @@ class GameScreen(Scene):
 
 
     def draw(self, sm, screen):
+        try:
 
-        screen.blit(self.background, (0, 0))
-        self.player.sprite.bullets.draw(screen)
-        [o.bullets.draw(screen) for o in self.enemies.sprites()]
-        self.player.draw(screen)
-        self.enemies.draw(screen)
-        self.explosions.draw(screen)
-        self.pause_button.draw(screen)
-        self.heart_draw(screen)
+            screen.blit(self.background, (0, 0))
+            self.player.sprite.bullets.draw(screen)
+            [o.bullets.draw(screen) for o in self.enemies.sprites()]
+            self.player.draw(screen)
+            self.enemies.draw(screen)
+            self.explosions.draw(screen)
+            self.pause_button.draw(screen)
+            self.heart_draw(screen)
+            points = self.font_mid.render(f"Points: {self.points}",True,(255,255,255))
+            points_rect = points.get_rect(center=(screen_width*0.1,screen_height*0.1))
+            screen.blit(points,points_rect)
+        except :
+            pass
 
 
-        points = self.font_mid.render(f"Points: {self.points}",True,(255,255,255))
-        points_rect = points.get_rect(center=(screen_width*0.1,screen_height*0.1))
-        screen.blit(points,points_rect)
 
     def enemy_creator(self):
         if pygame.time.get_ticks() - self.last_enemy > self.frequency and len(self.enemies.sprites()) <= int(self.quantity):
             self.quantity += 0.2
             self.frequency *= 0.995
+            self.bullet_speed *= 1.005
             self.last_enemy = pygame.time.get_ticks()
-            self.enemies.add(Enemy((random.randint(40, screen_width - 40), random.randint(40, screen_height * 0.5)), 2,self.frequency))
+            self.enemies.add(Enemy((random.randint(40, screen_width - 40), random.randint(40, screen_height * 0.5)),2,self.frequency,self.bullet_speed))
 
     def collisions(self,sm):
         try:
@@ -122,6 +127,7 @@ class GameScreen(Scene):
                     if self.player.sprite.rect.colliderect(bullet.rect):
                         if self.player.sprite.helth_damage(bullet.damage):
                             sm.pop()
+                            sm.push(LoseScreen(self,self.points, self.name))
                             return
 
                         bullet.kill()

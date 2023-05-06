@@ -20,6 +20,7 @@ class ClickButton:
         self.image = self.images[0]
         self.image_rect = self.image.get_rect(center=(x, y))
 
+
         self.text = text
         self.font = pygame.font.Font(os.path.abspath("assets/fonts/forwa.ttf"), 14)
         self.rendered_text = self.font.render(self.text, True, (0, 0, 0))
@@ -43,7 +44,7 @@ class ClickButton:
     def draw(self, screen: pygame.surface.Surface, alpha=255):
 
         if self.hover:
-            self.rendered_text = self.font.render(self.text, True, (255, 20, 20))
+            self.rendered_text = self.font.render(self.text, True, (255,255,255))
 
             if self.clicked:
                 self.image = self.images[-1]
