@@ -3,6 +3,7 @@ import os
 
 import pygame.image
 
+from CreditScreen import CreditScreen
 from GameScreen import GameScreen
 from NameSelectionScreen import NameSelectionScreen
 from SceneManager import SceneManager
@@ -21,6 +22,9 @@ class MainMenuScreen(Scene):
 
         self.font = pygame.font.Font(os.path.abspath("assets/fonts/forwa.ttf"), 136)
         self.font_low = pygame.font.Font(os.path.abspath("assets/fonts/forwa.ttf"), 11)
+
+        self.music = pygame.mixer.music.load("assets/sounds/opening.mp3","ambient")
+        pygame.mixer.music.play(-1,0,0)
 
         self.main_text = self.font.render("1941", True, (200, 50, 50))
 
@@ -66,6 +70,12 @@ class MainMenuScreen(Scene):
         if self.play_button.is_clicked():
             sm.push(NameSelectionScreen())
             self.play_button.clicked = False
+
+        if self.credits_button.is_clicked():
+            sm.push(CreditScreen())
+            self.credits_button.clicked = False
+
+
 
         if self.quit_button.is_clicked():
             sm.pop()

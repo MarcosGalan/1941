@@ -18,6 +18,9 @@ class NameSelectionScreen(Scene):
         self.big_font = pygame.font.Font("assets/fonts/forwa.ttf", 136)
         self.font = pygame.font.Font("assets/fonts/forwa.ttf", 32)
 
+        self.music = pygame.mixer.music.load("assets/sounds/stage1.mp3","ambient")
+        pygame.mixer.music.play(-1,0,0)
+
         self.main_text = self.big_font.render("1941", True, (200, 50, 50))
         self.name_text = self.font.render("PICK A NICKNAME:",True,(255,255,255))
 
@@ -37,10 +40,12 @@ class NameSelectionScreen(Scene):
 
     def input(self, sm: SceneManager, inputStream: InputStream):
         if self.start_button.is_clicked():
+
             sm.push(GameScreen(self.textBox.get_text()))
             self.start_button.clicked = False
         if self.back_button.is_clicked():
             sm.pop()
+            sm.scenes[0].__init__()
 
     def update(self, sm: SceneManager, inputStream: InputStream):
         self.textBox.update(inputStream)

@@ -30,6 +30,10 @@ class GameScreen(Scene):
 
         self.font_mid = pygame.font.Font(os.path.abspath("assets/fonts/forwa.ttf"), 12)
 
+        # Sounds
+
+        self.explosion_sound = pygame.mixer.Sound("assets/sounds/shipexplosion.wav")
+        self.life_sound = pygame.mixer.Sound("assets/sounds/life_lose.wav")
 
         # Player
         self.name = name
@@ -60,6 +64,7 @@ class GameScreen(Scene):
         if inputStream.keyboard.isKeyPressed(pygame.K_ESCAPE) or self.pause_button.is_clicked():
             self.pause_button.clicked = False
             self.enemy_creator()
+            pygame.mixer.music.pause()
             sm.push(PauseScreen(self))
 
     def update(self, sm, inputStream):
@@ -109,6 +114,7 @@ class GameScreen(Scene):
                 for agro in enemy:
                     if agro.damage(bullet.damage):
                         self.points += 10
+                        self.explosion_sound.play()
                         self.explosions.add(Explosion(agro.rect.center))
 
 
@@ -124,6 +130,7 @@ class GameScreen(Scene):
                         collision.kill()
 
                     if self.player.sprite.rect.colliderect(bullet.rect):
+                        self.life_sound.play()
                         if self.player.sprite.helth_damage(bullet.damage):
                             sm.pop()
                             sm.push(LoseScreen(self,self.points, self.name))

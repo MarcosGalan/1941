@@ -31,6 +31,7 @@ class PauseScreen(Scene):
     def input(self, sm: SceneManager, inputStream: InputStream):
 
         if inputStream.keyboard.isKeyPressed(pygame.K_ESCAPE) or self.play_button.is_clicked():
+            pygame.mixer.music.play(-1, 0, 0)
             sm.pop()
         if self.home_button.is_clicked():
             sm.scenes[0].__init__()

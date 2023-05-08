@@ -28,6 +28,10 @@ class LoseScreen(Scene):
         self.foreground = pygame.image.load("assets/sprites/foreground.png")
         self.foreground = pygame.transform.scale(self.foreground, (screen_width, screen_height))
 
+
+        self.music = pygame.mixer.Sound("assets/sounds/game_over.mp3")
+        self.music.play()
+
         self.font_big = pygame.font.Font(os.path.abspath("assets/fonts/forwa.ttf"), 64)
         self.font_mid = pygame.font.Font(os.path.abspath("assets/fonts/forwa.ttf"), 32)
 

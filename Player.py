@@ -11,6 +11,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos: tuple, speed, health, damage, constraint_x):
         super().__init__()
 
+        self.shot_sound = pygame.mixer.Sound("assets/sounds/shot_sound.mp3")
+
         self.sprites = []
         for i in range(7):
             temp_image = pygame.image.load(f"assets/sprites/player/player_{i}.png")
@@ -38,6 +40,7 @@ class Player(pygame.sprite.Sprite):
         current_time = pygame.time.get_ticks()
         if current_time - self.shoot_delay > 200:
             self.shoot_delay = current_time
+            self.shot_sound.play()
             self.bullets.add(Bullet((self.rect.centerx - 14, self.rect.centery), -10, 1,screen_height))
             self.bullets.add(Bullet((self.rect.centerx + 14, self.rect.centery), -10, 1,screen_height))
 
