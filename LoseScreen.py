@@ -2,11 +2,12 @@
 
 import json
 import os
+import io
+
 
 from pyparsing import unicode
 
 import pygame
-import io
 
 from SceneManager import SceneManager
 from Utils.Button import ClickButton
@@ -70,8 +71,9 @@ class LoseScreen(Scene):
                 with io.open('data.json', 'w', encoding='utf8') as outfile:
                     str_ = json.dumps(data_loaded,
                                       indent=4, sort_keys=True,
-                                      separators=(',', ': '), ensure_ascii=False)
-                    outfile.write(unicode(str_))
+                                      separators=(',', ': '), ensure_ascii=True)
+
+                    outfile.write(str_)
 
                 outfile.close()
 

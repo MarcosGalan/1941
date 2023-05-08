@@ -33,7 +33,7 @@ class GameScreen(Scene):
 
         # Player
         self.name = name
-        self.max_health = 10
+        self.max_health = 5
         player_sprite = Player(pos=(screen_width / 2, screen_height * 0.95), speed=5, health=self.max_health, damage=5,
                                constraint_x=screen_width)
         self.player = pygame.sprite.GroupSingle(player_sprite)
@@ -59,7 +59,6 @@ class GameScreen(Scene):
     def input(self, sm, inputStream):
         if inputStream.keyboard.isKeyPressed(pygame.K_ESCAPE) or self.pause_button.is_clicked():
             self.pause_button.clicked = False
-
             self.enemy_creator()
             sm.push(PauseScreen(self))
 
@@ -95,9 +94,9 @@ class GameScreen(Scene):
 
     def enemy_creator(self):
         if pygame.time.get_ticks() - self.last_enemy > self.frequency and len(self.enemies.sprites()) <= int(self.quantity):
-            self.quantity += 0.2
-            self.frequency *= 0.995
-            self.bullet_speed *= 1.005
+            self.quantity += 0.5
+            self.frequency *= 0.99
+            self.bullet_speed *= 1.007
             self.last_enemy = pygame.time.get_ticks()
             self.enemies.add(Enemy((random.randint(40, screen_width - 40), random.randint(40, screen_height * 0.5)),2,self.frequency,self.bullet_speed))
 

@@ -24,6 +24,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = self.sprites[self.current_sprite]
 
         self.health = health
+        self.spawn_time = pygame.time.get_ticks()
 
         self.objetive_pos = pos
         self.rect = self.image.get_rect(midbottom=pos)
@@ -34,6 +35,7 @@ class Enemy(pygame.sprite.Sprite):
         self.last_shoot = 0
         self.bullets = pygame.sprite.Group()
 
+
     def movement(self):
         if self.rect.centerx < self.objetive_pos[0]:
             self.rect.center = (self.rect.centerx + 3, self.rect.centery)
@@ -41,7 +43,17 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.centery < self.objetive_pos[1]:
             self.rect.center = (self.rect.centerx, self.rect.centery + 3)
 
+    def exit_movement(self):
+        self.rect.center = (self.rect.centerx + 3, self.rect.centery)
+        self.rect.center = (self.rect.centerx, self.rect.centery + 1)
+
+        if self.rect.right < 0 or self.rect.left > screen_width:
+            self.kill()
     def update(self) -> None:
+
+        if pygame.time.get_ticks() - self.spawn_time >= 20000:
+            self.exit_movement()
+
         self.animation()
         self.shoot_control()
         self.movement()
